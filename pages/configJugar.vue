@@ -2,12 +2,13 @@
    <div class="contenedor">
       
       <div class="cabeceras">
-         <h1>¡Personaliza tu juego!</h1> 
+         <h1>OCA GAME</h1> 
+         <h2 style="color: yellowgreen">¡Personaliza tu juego!</h2>
       </div>
 
       <div>
          <div class="marginCard">
-            <v-card color="cyan" height="8em">
+            <v-card color="cyan" height="6.5em">
                <h2>Dimensiones del tablero</h2>
                <div>
                   <label for="filas">Filas:</label>
@@ -34,7 +35,7 @@
          
 
          <div class="marginCard">
-            <v-card color="cyan" height="8em">
+            <v-card color="cyan" height="6.5em">
                <h2>Número de jugadores</h2>
 
                <label for="nroJugadores">Jugadores:</label>
@@ -47,7 +48,7 @@
          </div>
          
          <div class="marginCard">
-            <v-card color="cyan" height="8em">
+            <v-card color="cyan" height="6.5em">
                <h2>Color de jugadores</h2>
                
                <div class="colores">
