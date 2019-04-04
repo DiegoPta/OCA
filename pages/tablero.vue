@@ -5,7 +5,7 @@
                 <h1>OCA GAME</h1> 
             </div>
             
-            <div style="width: 100%">
+            <div>
                 <div style="float: left; vertical-align: middle; display: inline-block; width: 16em; margin: 1em">
                     <div style="display: table-cell">
                         <h2 style="display: table-row">Información</h2>
@@ -31,10 +31,12 @@
 
                 <div style="vertical-align: middle; display: inline-block">
                     <div v-for="f in filas" :key="f">
-                        <div v-for="c in columnas" :key="getNumero(f,c)" class="tablero">
-                            <div v-if="getNumero(f,c) == (filas * columnas)" class="llegada">{{getNumero(f,c)}}<br>Meta</div>
-                            <div v-else-if="getNumero(f,c) == 1" class="salida">{{getNumero(f,c)}}<br>Inicio</div>
-                            <div v-else class="celdas">{{getNumero(f,c)}}</div>
+                        <div v-for="c in columnas" :key="getNumero(f,c)"  class="tablero">
+                            <div>
+                                <div v-if="getNumero(f,c) == (filas * columnas)" class="llegada">{{getNumero(f,c)}}<br>Meta</div>
+                                <div v-else-if="getNumero(f,c) == 1" class="salida">{{getNumero(f,c)}}<br>Inicio</div>
+                                <div v-else class="celdas">{{getNumero(f,c)}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,9 +45,6 @@
                     <img src="@/static/images/dado.png">
                 </div>
             </div>
-            
-            
-           
             
         </div>
 
