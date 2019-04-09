@@ -1,19 +1,18 @@
-
 <template lang="html">
     
   <div class="contenedor">
     <v-layout  d-block>
         <div class="cabeceras">
-            <h1>Crear Pregunta</h1>
+            <h1 class= "animated bounceInDown">Crear Pregunta</h1>
         </div>
-
+ 
   
-      <v-card class="form2" color="cyan">
+      <v-card class="form2 animated bounceInLeft" color="cyan">
 
         <h2>Dilegenciar campos</h2>
 
         <v-textarea
-          class="textarea_pregunta"
+          class="textarea_pregunta "
           outline
           maxlength="200"
           :counter="200"
@@ -28,7 +27,7 @@
           :counter="80"
           maxlength="80"
           v-model="agregarPregunta.opcionRespuesta"
-          label="Respuesta (Debe ser igual a una opciones)"
+          label="Respuesta"
           outline
           required
         ></v-text-field>
@@ -67,14 +66,19 @@
         <v-btn  v-on:click="clear">Limpiar</v-btn>
       </v-card>
 
-      <v-card class="form3" color="cyan">
+      <v-card class="form3 animated bounceInLeft" id="clas" color="cyan" style="overflow:scroll; overflow-x:hidden;">
 
         <h2>Clasicicaciones</h2>
-          
-        <div v-for="clasi in sel">
-            <v-checkbox v-model="selected" :label="`${clasi}`" :value="clasi"></v-checkbox>
-        </div>  
-      </v-card>
+
+        <div v-if="vClasificaciones.length < 1">
+          <label>No hay clasificaciones creadas</label>
+        </div>
+        
+        <div id="lista" v-for="clasi in vClasificaciones">
+          <v-checkbox v-model="selected" :label="`${clasi}`" :value="clasi"></v-checkbox>
+        </div>
+      
+      </v-card> 
 
     </v-layout>
   </div>
@@ -95,36 +99,28 @@ let config = {
     storageBucket: "ocagame-bd.appspot.com",
     messagingSenderId: "131259496872"
 }
-
 if (!Firebase.apps.length) {
-    Firebase.initializeApp(config);
-  } 
+  Firebase.initializeApp(config);
+}
 
 let db = Firebase.database();
-let agregarPreguntas = db.ref('preguntas');
-let buscarClasificaciones = db.ref('clasificaciones');
+let agregarPreguntas = db.ref('clasificaciones');
 
 let vClasificaciones = []; 
-let keyClas = [];
 
-
-buscarClasificaciones.on('value', function(snapshot){
+agregarPreguntas.orderByValue.on('value', function(snapshot){
     let jsonA = snapshot.val();
+    //document.getElementById("lista") = null;
     for (let index in jsonA){
-      vClasificaciones.push(jsonA[index].clasificacion)
-      keyClas.push(index)
+      vClasificaciones.push(index);
     }
-
 })
-
-
 
 
 export default {
   
   firebase: {
-    preguntas: agregarPreguntas,
-    clasificaciones: buscarClasificaciones
+    clasificaciones: agregarPreguntas
   },
 
   data() {
@@ -136,7 +132,7 @@ export default {
         opcionB: '',
         opcionC: ''
       },
-      sel : vClasificaciones,
+      vClasificaciones,
       selected: []
     }
     
@@ -155,7 +151,8 @@ export default {
        if (this.agregarPregunta.pregunta == '' || this.agregarPregunta.opcionRespuesta == '' || this.agregarPregunta.opcionA == '' || 
        this.agregarPregunta.opcionB == '' || this.agregarPregunta.opcionC == '' ){
           Toastr.error('Hay algun campo vacio')
-        } else if (this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionA || this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionB || this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionC ||
+        } else if (this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionA || 
+        this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionB || this.agregarPregunta.opcionRespuesta == this.agregarPregunta.opcionC ||
         this.agregarPregunta.opcionA == this.agregarPregunta.opcionB ||  this.agregarPregunta.opcionA == this.agregarPregunta.opcionC || 
         this.agregarPregunta.opcionB == this.agregarPregunta.opcionC ) {
           Toastr.error('Tiene opciones de respuestas repetidas')
@@ -164,13 +161,19 @@ export default {
         }else if(this.selected.length > 1){
           Toastr.error('Solo se puede seleccionar una clasificación')
         }else {
-        agregarPreguntas.push(this.agregarPregunta); 
-        pregunta: this.agregarPregunta.pregunta = ''
-        opcionRespuesta: this.agregarPregunta.opcionRespuesta = ''
-        this.agregarPregunta.opcionA = ''
-        this.agregarPregunta.opcionB = ''
-        this.agregarPregunta.opcionC = ''
-        Toastr.success('Pregunta creada exitosamente')
+          
+          let agregarPreguntas = db.ref('clasificaciones/'+ this.selected);
+
+          // agregarPreguntas.set({
+          //     pregunta :this.agregarPregunta
+          //   });
+          agregarPreguntas.push(this.agregarPregunta); 
+          this.agregarPregunta.pregunta = ''
+          this.agregarPregunta.opcionRespuesta = ''
+          this.agregarPregunta.opcionA = ''
+          this.agregarPregunta.opcionB = ''
+          this.agregarPregunta.opcionC = ''
+          Toastr.success('Pregunta creada exitosamente')
         }
     }
   }
@@ -192,6 +195,7 @@ export default {
 
 .form3{
   width: 30%;
+  height: 500px;
   border-radius: 5px; 
   padding: 1em;
   margin-left: 10em;
@@ -208,6 +212,17 @@ export default {
   height: 90px;
   width: 100%;
   display: inline-block;
+}
+
+/* Scroll Personalizado */
+
+.form3::-webkit-scrollbar {
+	width: 11px;
+}
+
+.form3::-webkit-scrollbar-thumb {
+	background: rgb(73, 73, 73);
+	border-radius: 5px;
 }
 
 </style>

@@ -3,18 +3,18 @@
     <div class="contenedor">
         <v-layout  d-block>
             <div class="cabeceras">
-                <h1>OCA GAME</h1>
+                <h1 class="animated bounceInDown delay-1s">OCA GAME</h1>
             </div>
             <div>
-                <img src="@/static/images/oca.png">
+                <img class="animated bounceInDown" src="@/static/images/oca.png">
             </div>
 
             <div style="">
-                <v-btn  to="configJugar">Jugar</v-btn>
+                <v-btn class="animated bounceInDown delay-1s" to="configJugar">Jugar</v-btn>
             </div>
                 
             <div>
-                <v-btn to="agregarContenido">Agregar contenido</v-btn>
+                <v-btn class="animated bounceInDown delay-1s" to="agregarContenido">Agregar contenido</v-btn>
             </div>
 
         </v-layout>

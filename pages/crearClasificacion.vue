@@ -3,19 +3,19 @@
     <div class="contenedor">
       <v-layout  d-block >
         <div class="cabeceras">
-            <h1>Crear clasificacion</h1>
+            <h1 class="animated bounceInDown">Crear clasificacion</h1>
         </div>
 
         <v-flex xs12 sm8 md6>
 
-            <v-card class="form" color="cyan" >
+            <v-card class="form animated bounceInDown" color="cyan" >
                 <v-card-title class="headline"></v-card-title>
 
                   <v-text-field
                   class="clasificacion"
                   :counter="80"
                   maxlength="80"
-                  v-model="agregarClasificacion.clasificacion"
+                  v-model="clasificacion"
                   label="Nombre de la clasificación"
                   outline
                   required
@@ -28,12 +28,12 @@
                   outline
                   maxlength="200"
                   :counter="200"
-                  v-model="agregarClasificacion.descripcion"
+                  v-model="descripcion"
                   label="Descripcción"
                   required>
                   </v-textarea>
 
-                  <v-btn class="i nput_button" @click="addClasificacion">Guardar</v-btn>
+                  <v-btn class="input_button" @click="addClasificacion" v-bind:disabled="clasificacion === ''">Guardar</v-btn>
                   <v-btn class="input_button" v-on:click="clear">Limpiar</v-btn>
 
               </v-card>
@@ -59,11 +59,20 @@ let config = {
 }
 
 
- if (!Firebase.apps.length) {
+  if (!Firebase.apps.length) {
     Firebase.initializeApp(config);
   } 
   let db = Firebase.database();
   let agregarClas = db.ref('clasificaciones');
+
+  let vClas = []; 
+
+  agregarClas.orderByValue().on('value', function(snapshot){
+      let jsonA = snapshot.val();
+      for (let index in jsonA){
+        vClas.push(index)
+      }
+  })
 
 export default {
   
@@ -73,27 +82,31 @@ export default {
 
   data() {
     return {
-      agregarClasificacion: {
-        clasificacion: '',
-        descripcion: ''
-      }
+      descripcion: '',
+      clasificacion : ''
     }
   },
 
   methods: {
     clear() {
-      this.agregarClasificacion.clasificacion = ''
-      this.agregarClasificacion.descripcion = ''
+      this.clasificacion = ''
+      this.descripcion = ''
       Toastr.success('Limpiado')
     },
     addClasificacion() { 
-      if (this.agregarClasificacion.clasificacion == '' ||  this.agregarClasificacion.descripcion == ''){
-          Toastr.error('Hay algun campo vacio')
+
+      if(vClas.includes(this.clasificacion.toLowerCase())){
+          Toastr.error('Ya existe una clasificación con el nombre ingresado');
+      }else if ( this.descripcion == ''){
+          Toastr.error('Hay algun campo vacio');
       } else{
-        agregarClas.push(this.agregarClasificacion); 
-        this.agregarClasificacion.clasificacion = ''
-        this.agregarClasificacion.descripcion = ''
-        Toastr.success('Pregunta creada exitosamente')
+        let agregarClas = db.ref('clasificaciones/'+this.clasificacion);
+        agregarClas.set({
+            descripcion: this.descripcion
+          });
+        this.clasificacion = ''
+        this.descripcion = ''
+        Toastr.success('Pregunta creada exitosamente');
       }
     }
     

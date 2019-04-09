@@ -1,12 +1,12 @@
-<template lang="html">
+   <template lang="html">
    <div class="contenedor">
       
       <div class="cabeceras">
-         <h1>OCA GAME</h1> 
-         <h2 style="color: yellowgreen">¡Personaliza tu juego!</h2>
+         <h1 class="animated bounceInDown">OCA GAME</h1> 
+         <h2 class="animated bounceInDown delay-1s" style="color: greenyellow">¡Personaliza tu juego!</h2>
       </div>
 
-      <div>
+      <div class="animated bounceInLeft delay-1s">
          <div class="marginCard">
             <v-card color="cyan" height="6.5em">
                <h2>Dimensiones del tablero</h2>
@@ -68,7 +68,7 @@
       
       </div>
       <div style="margin-top: 2em">
-         <v-btn to="tablero" class="">Jugar</v-btn>
+         <v-btn class="animated bounceInDown delay-1s" to="tablero">Jugar</v-btn>
       </div>
       
    </div>
@@ -113,5 +113,4 @@ export default {
 </script>
 
 <style>
-
 </style>
