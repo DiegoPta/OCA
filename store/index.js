@@ -9,6 +9,7 @@ const store =() => {
             colorJugador2:"",
             colorJugador3:"", 
             colorJugador4:"",
+            clasificacion:""
         },
         mutations:{
             setNroFilas(state,fila){
@@ -25,6 +26,8 @@ const store =() => {
                 state.colorJugador3=jugador
             },setColorJugador4(state,jugador){
                 state.colorJugador4=jugador
+            },setClasificacion(state,clasificacion){
+                state.clasificacion=clasificacion
             }
         },
         getters:{
@@ -42,6 +45,8 @@ const store =() => {
                return state.colorJugador3
            },getColorJugador4(state){
                return state.colorJugador4
+           },getClasificacion(state){
+               return state.clasificacion
            }
         }
 

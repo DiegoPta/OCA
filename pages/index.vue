@@ -10,11 +10,17 @@
             </div>
 
             <div style="">
-                <v-btn class="animated bounceInDown delay-1s" to="configJugar">Jugar</v-btn>
+                <v-btn round class="animated bounceInDown delay-1s btns" to="configJugar">
+                    <v-icon left>videogame_asset</v-icon>
+                        Jugar
+                    </v-btn>
             </div>
                 
             <div>
-                <v-btn class="animated bounceInDown delay-1s" to="agregarContenido">Agregar contenido</v-btn>
+                <v-btn round class="animated bounceInDown delay-1s btns" to="agregarContenido">
+                    <v-icon left>note_add</v-icon>
+                        Agregar contenido
+                    </v-btn>
             </div>
 
         </v-layout>

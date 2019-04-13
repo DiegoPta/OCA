@@ -1,5 +1,9 @@
 <template lang="html">
     <div class="contenedor">
+         <v-btn class="btnDevolder animated bounceInDown delay-1s" fab small color="red" to="/">
+            <v-icon>arrow_back</v-icon>
+        </v-btn>
+
         <h1 class="animated bounceInDown delay-1s">Agregar Contenido</h1>
     
     <div class="cabeceras">
@@ -10,12 +14,18 @@
             </div>
 
             <div style="">
-                <v-btn class="animated bounceInDown delay-1s" to="crearClasificacion">Crear clasificación</v-btn>
+                <v-btn round class="animated bounceInDown delay-1s btns" to="crearClasificacion">
+                    <v-icon left>create</v-icon>
+                       Crear clasificación
+                </v-btn>
             </div>
                 
             <div>
-                <v-btn class="animated bounceInDown delay-1s" to="crearPregunta">Crear pregunta</v-btn>
-    </div>
+                <v-btn round class="animated bounceInDown delay-1s btns" to="crearPregunta">
+                    <v-icon left>question_answer</v-icon>
+                    Crear pregunta
+                </v-btn>
+            </div>
         
     </div>
 </template>

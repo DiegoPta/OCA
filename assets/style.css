@@ -54,6 +54,18 @@ h1 {
   font-style: italic;
   font-family: cursive;
   font-weight: bold;
+  display: inline-block;
+  margin-right: 1em;
+}
+
+h5 {
+  color: greenyellow;
+  font-size: 50px;
+  font-style: italic;
+  font-family: cursive;
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 2em;
 }
 
 h2 {
@@ -80,8 +92,8 @@ h2 {
 
 .marginCard {
   margin-bottom: 2em;
-  margin-left: 3em;
-  margin-right: 3em;
+  margin-left: 2em;
+  margin-right: 1em;
 }
 
 .tablero {
@@ -95,4 +107,24 @@ h2 {
   border-style: solid;
   border-width: 1px;
   display: table-cell;
+}
+
+.oca {
+  background-image: url("../static/images/oca2.png");
+  display: table-cell;
+  background-color: white;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  width: 60px;
+  height: 60px;
+  color: black;
+}
+
+.btnDevolder{
+  float: left;
+}
+
+.btns{
+  height: 90%;
 }

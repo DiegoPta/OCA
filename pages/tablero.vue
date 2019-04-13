@@ -2,6 +2,9 @@
   <div class="contenedor">
 
     <div class="cabeceras">
+        <v-btn class="btnDevolder animated bounceInLeft delay-1s" fab small color="red" to="configJugar">
+          <v-icon>arrow_back</v-icon>
+        </v-btn>
         <h1 class="animated bounceInDown">OCA GAME</h1> 
     </div>
       
@@ -40,6 +43,7 @@
             
             <div v-if="getNumero(f,c) == (filas * columnas)" class="llegada" :id="'celda'+getNumero(f,c)">{{getNumero(f,c)}}<br>Meta</div>
             <div v-else-if="getNumero(f,c) == 1" class="salida" :id="'celda'+getNumero(f,c)">{{getNumero(f,c)}}<br>Inicio</div>
+            <div v-else-if="esOca(getNumero(f,c))" class="oca" :id="'celda'+getNumero(f,c)">{{getNumero(f,c)}}</div>
             <div v-else class="celdas" :id="'celda'+getNumero(f,c)">{{getNumero(f,c)}}</div>
           </div>
         </div>
@@ -47,17 +51,24 @@
 
       <div class="animated bounceInRight delay-1s" style="vertical-align: middle; display: inline-block; width: 16em; margin-right: 3em; float: right">
           <img :class="{'heartBeat animated': animated}" class="dado" src="@/static/images/dado_6.png" id="imagenDado" >
-          <v-btn class="input_button" v-on:click="tirar() + animate()" id="tirar">TIRAR</v-btn>
+          <v-btn class="input_button" v-on:click="tirar() + animate()" id="tirar">
+          <v-icon left>loop</v-icon>
+            TIRAR
+            </v-btn>
       </div>
     </div>
-      
+
   </div>
 
 
 
 </template>
 
+
+
 <script>
+import Toastr from 'toastr';
+
 export default {
   beforeMount() {
     this.cargar()
@@ -71,7 +82,8 @@ export default {
       colores: [],
       celdas: [],
       posiciones: [],
-      animated: false
+      animated: false,
+      clasificacion: ""
     }
   },
   methods: {
@@ -83,14 +95,16 @@ export default {
       this.colores[2] = this.$store.getters.getColorJugador2
       this.colores[3] = this.$store.getters.getColorJugador3
       this.colores[4] = this.$store.getters.getColorJugador4
+      this.clasificacion = this.$store.getters.getClasificacion
 
       for (let i = 0; i < this.filas * this.columnas; i++) {
         this.celdas[i] = "celda"+(i+1);
       }
 
       for (let i = 0; i < this.nroJugadores; i++) {
-        this.posiciones[i] = 1
+        this.posiciones[i] = 1;
       }
+
     },
     getNumero(f, c) {
       if (f % 2 == 0) {
@@ -112,29 +126,15 @@ export default {
       this.cambiarDado(aleatorio);
 
       if(this.posiciones[this.turno - 1] + aleatorio < (this.filas * this.columnas)){
-        if(this.posiciones[this.turno - 1] > 1){
-          document.getElementById(this.celdas[this.posiciones[this.turno - 1] - 1]).style.backgroundColor = "white";
-        }
-
-        this.posiciones[this.turno - 1] += aleatorio;
-        var posicion = this.posiciones[this.turno - 1];
-
-        var celda = document.getElementById(this.celdas[posicion -1]);
-        var color = window.getComputedStyle(celda).backgroundColor;
-
-        if(this.getColor(color) == "white"){
-          document.getElementById(this.celdas[posicion - 1]).style.backgroundColor = this.getColor(this.colores[this.turno]);
-        }else{
-          document.getElementById(this.celdas[posicion - 1]).style.backgroundColor = "cyan";
-        }
+        this.avanzar(aleatorio);
+        
       }else if(this.posiciones[this.turno - 1] + aleatorio == (this.filas * this.columnas)){
         // Aquí el toast de ganador
-        console.log("Triunfo para el Jugador: "+ this.turno);
+        Toastr.success("Triunfo para el Jugador: "+ this.turno);
         document.getElementById("tirar").disabled = true;
-        document.getElementById("celda"+(this.filas * this.columnas)).innerText = "Gana jug " + this.turno;
       }else{
         // Aquí un toast de que sobrepasó el límite y que intente de nuevo en el próximo turno
-        console.log("El resultado de tu lanzamiento sobrepasa la meta. Intenta de nuevo en tu siguiente turno");
+        Toastr.info('Jugador ' + this.turno + ": El resultado de tu lanzamiento sobrepasa la meta. Intenta de nuevo en tu siguiente turno");
       }
 
       
@@ -186,7 +186,52 @@ export default {
       var self = this;
       self.animated = true;
       setTimeout(function(){ self.animated = false; }, 1000);
-    }
+    },
+    esOca(numero){
+      var rango = Math.trunc((this.filas * this.columnas) / 4);
+      if((numero == rango - 1) || (numero == rango * 2 - 2) || (numero == rango * 3 - 3) || (numero == rango * 4 - 4)){
+        return true;
+      }
+      return false;
+    },
+   preguntar(){
+     
+     document.getElementById("tirar").disabled = false;
+   },
+   avanzar(aleatorio){
+      if(this.posiciones[this.turno - 1] > 1){
+          var cont = 0;
+          var pos = 0;
+          for (let i = 0; i < this.posiciones.length; i++) {
+            if((this.turno - 1) != i){
+              if(this.posiciones[this.turno - 1] == this.posiciones[i]){
+                cont++;
+                pos = i;
+              }
+            }
+            
+          }
+
+          if(cont == 0){
+            document.getElementById(this.celdas[this.posiciones[this.turno - 1] - 1]).style.backgroundColor = "white";
+          }else if(cont == 1){
+            document.getElementById(this.celdas[this.posiciones[this.turno - 1] - 1]).style.backgroundColor = this.getColor(this.colores[pos + 1]);
+          }
+          
+        }
+
+        this.posiciones[this.turno - 1] += aleatorio;
+        var posicion = this.posiciones[this.turno - 1];
+
+        var celda = document.getElementById(this.celdas[posicion -1]);
+        var color = window.getComputedStyle(celda).backgroundColor;
+
+        if(this.getColor(color) == "white"){
+          document.getElementById(this.celdas[posicion - 1]).style.backgroundColor = this.getColor(this.colores[this.turno]);
+        }else{
+          document.getElementById(this.celdas[posicion - 1]).style.backgroundColor = "cyan";
+        }
+   }
   }
 }
 </script>

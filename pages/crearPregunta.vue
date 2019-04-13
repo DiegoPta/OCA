@@ -3,6 +3,11 @@
   <div class="contenedor">
     <v-layout  d-block>
         <div class="cabeceras">
+
+            <v-btn class="btnDevolder animated bounceInLeft" fab small color="red" to="agregarContenido">
+              <v-icon>arrow_back</v-icon>
+            </v-btn>
+
             <h1 class= "animated bounceInDown">Crear Pregunta</h1>
         </div>
  
@@ -62,13 +67,19 @@
           required
         ></v-text-field>
 
-        <v-btn  @click="addPreguntas">Guardar</v-btn>
-        <v-btn  v-on:click="clear">Limpiar</v-btn>
+       <v-btn class="btns" round @click="addPreguntas">
+          <v-icon left>save</v-icon>
+          Guardar
+        </v-btn>
+        <v-btn class="btns" round v-on:click="clear">
+          <v-icon left>clear</v-icon>
+          Limpiar
+        </v-btn>
       </v-card>
 
       <v-card class="form3 animated bounceInLeft" id="clas" color="cyan" style="overflow:scroll; overflow-x:hidden;">
 
-        <h2>Clasicicaciones</h2>
+        <h2>Clasificaciones</h2>
 
         <div v-if="vClasificaciones.length < 1">
           <label>No hay clasificaciones creadas</label>
@@ -90,7 +101,6 @@
 import Firebase from 'firebase';
 import Toastr from 'toastr';
 
-
 let config = {
    apiKey: "AIzaSyB8-Gut27wxsuGdg1e7DyavWFgF60gnm8A",
     authDomain: "ocagame-bd.firebaseapp.com",
@@ -101,19 +111,29 @@ let config = {
 }
 if (!Firebase.apps.length) {
   Firebase.initializeApp(config);
+  
 }
 
 let db = Firebase.database();
 let agregarPreguntas = db.ref('clasificaciones');
 
+
+var bandera = 1;
 let vClasificaciones = []; 
 
-agregarPreguntas.orderByValue.on('value', function(snapshot){
-    let jsonA = snapshot.val();
-    //document.getElementById("lista") = null;
-    for (let index in jsonA){
-      vClasificaciones.push(index);
-    }
+
+agregarPreguntas.orderByValue().on('value',function(snapshot){
+  if(bandera == 1){
+    bandera++;
+  }else{
+    vClasificaciones = [];
+  }
+  
+  let jsonA = snapshot.val();
+  for (let index in jsonA){
+    vClasificaciones.push(index);
+  }
+    
 })
 
 

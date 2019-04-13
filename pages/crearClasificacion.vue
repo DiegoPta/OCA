@@ -3,6 +3,9 @@
     <div class="contenedor">
       <v-layout  d-block >
         <div class="cabeceras">
+            <v-btn class="btnDevolder animated bounceInLeft" fab small color="red"to="agregarContenido">
+              <v-icon>arrow_back</v-icon>
+          </v-btn>
             <h1 class="animated bounceInDown">Crear clasificacion</h1>
         </div>
 
@@ -33,8 +36,14 @@
                   required>
                   </v-textarea>
 
-                  <v-btn class="input_button" @click="addClasificacion" v-bind:disabled="clasificacion === ''">Guardar</v-btn>
-                  <v-btn class="input_button" v-on:click="clear">Limpiar</v-btn>
+                  <v-btn round class="btns" @click="addClasificacion" v-bind:disabled="clasificacion === ''">
+                    <v-icon left>save</v-icon>
+                    Guardar
+                    </v-btn>
+                  <v-btn round class="btns" v-on:click="clear">
+                    <v-icon left>clear</v-icon>
+                    Limpiar
+                    </v-btn>
 
               </v-card>
               
@@ -67,12 +76,14 @@ let config = {
 
   let vClas = []; 
 
-  agregarClas.orderByValue().on('value', function(snapshot){
+  agregarClas.once('value').then( function(snapshot){
       let jsonA = snapshot.val();
       for (let index in jsonA){
         vClas.push(index)
       }
   })
+
+  
 
 export default {
   
@@ -106,7 +117,7 @@ export default {
           });
         this.clasificacion = ''
         this.descripcion = ''
-        Toastr.success('Pregunta creada exitosamente');
+        Toastr.success('Clasificación creada exitosamente');
       }
     }
     
